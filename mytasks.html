@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="TaskMate – My Tasks"/>
+  <meta name="author" content="IMS566 Student"/>
+  <title>TaskMate – My Tasks</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    #mainContent {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 768px) {
+      #mainContent {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar - fixed width 240px -->
+<aside id="sidebar">
+  <a href="dashboard.html" class="block px-5 py-5" style="border-bottom:1px solid #2e3057;">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-list-check text-white text-sm"></i>
+    </div>
+    <div>
+      <h2 class="font-poppins font-bold text-white text-base leading-none">TaskMate</h2>
+      <p class="text-slate-500 text-xs mt-0.5">Productivity App</p>
+    </div>
+  </div>
+</a>
+
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <p class="px-3 text-xs font-semibold uppercase tracking-widest text-slate-600 mb-2">Main Menu</p>
+    <a href="dashboard.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard
+    </a>
+    <a href="mytasks.html" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300">
+      <i class="fa-solid fa-list-check w-5 text-center"></i> My Tasks
+    </a>
+    <a href="completed.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-circle-check w-5 text-center"></i> Completed Tasks
+    </a>
+    <a href="calendar.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-calendar-days w-5 text-center"></i> Calendar
+    </a>
+    <a href="profile.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-user w-5 text-center"></i> Profile
+    </a>
+  </nav>
+
+  <div class="px-3 py-4" style="border-top:1px solid #2e3057;">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:#12131f;">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);" id="avatarInitials">HF</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold text-white truncate" id="sidebarUsername">Haikal Farihin</p>
+        <p class="text-xs text-slate-500">Administrator</p>
+      </div>
+      <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors">
+        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div id="mainContent">
+  <header class="sticky top-0 z-30 flex items-center gap-4 px-6 h-16" style="background:rgba(26,27,46,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2e3057;">
+    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden transition-colors mr-2">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+    <h2 class="font-poppins font-semibold text-white text-lg flex-1">My Tasks</h2>
+    <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Add Task</span>
+    </button>
+    <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors ml-2">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </a>
+  </header>
+
+  <div class="p-6">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div>
+        <h2 class="font-poppins font-bold text-white text-xl">My Tasks</h2>
+        <p class="text-slate-400 text-sm mt-1">All pending and in-progress tasks (9 active tasks)</p>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <select class="text-sm px-3 py-2 rounded-xl text-slate-300 outline-none border" style="background:#252640;border-color:#2e3057;">
+          <option>All Priority</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <input type="text" placeholder="🔍 Search tasks…" class="text-sm px-3 py-2 rounded-xl text-slate-300 outline-none border" style="background:#252640;border-color:#2e3057;"/>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Task 1 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Complete IMS566 Project</h3>
+          <span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Build a full-featured task manager web app with authentication, dashboard, and data visualisation using Chart.js.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>University</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 15 June 2025</span>
+          <span><i class="fa-regular fa-clock text-yellow-400 mr-1"></i>5 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-progress text-xs px-2.5 py-1 rounded-full">In Progress</span>
+          <button onclick="openViewModal(1)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 2 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Buy Groceries</h3>
+          <span class="badge-medium text-xs px-2.5 py-1 rounded-full">Medium</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Weekly grocery shopping – eggs, milk, vegetables, fruits, bread, and chicken.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Personal</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 10 June 2025</span>
+          <span><i class="fa-regular fa-clock text-red-400 mr-1"></i>Due today!</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(2)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 3 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Submit IMS580 Assignment</h3>
+          <span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Submit the final report via the e-learning portal before the deadline. Need to include references.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>University</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 20 June 2025</span>
+          <span><i class="fa-regular fa-clock text-yellow-400 mr-1"></i>10 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(3)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 4 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Read Tailwind Documentation</h3>
+          <span class="badge-low text-xs px-2.5 py-1 rounded-full">Low</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Study Tailwind CSS v4 and Chart.js v4 documentation for better implementation.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Learning</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 18 June 2025</span>
+          <span><i class="fa-regular fa-clock text-slate-500 mr-1"></i>8 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-progress text-xs px-2.5 py-1 rounded-full">In Progress</span>
+          <button onclick="openViewModal(4)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 5 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Morning Run Exercise</h3>
+          <span class="badge-medium text-xs px-2.5 py-1 rounded-full">Medium</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Go for a 5km run at the park. Track pace with fitness app. Aim for under 30 minutes.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Health</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 12 June 2025</span>
+          <span><i class="fa-regular fa-clock text-yellow-400 mr-1"></i>2 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(5)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 6 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Prepare Presentation Slides</h3>
+          <span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Create 15 slides for the IMS566 project presentation. Include screenshots and demo flow.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>University</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 22 June 2025</span>
+          <span><i class="fa-regular fa-clock text-slate-500 mr-1"></i>12 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(6)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 7 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Clean Email Inbox</h3>
+          <span class="badge-low text-xs px-2.5 py-1 rounded-full">Low</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Organize emails, unsubscribe from spam, and archive old messages.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Personal</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 25 June 2025</span>
+          <span><i class="fa-regular fa-clock text-slate-500 mr-1"></i>15 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(7)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 8 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Update LinkedIn Profile</h3>
+          <span class="badge-medium text-xs px-2.5 py-1 rounded-full">Medium</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Add new skills, update work experience, and request recommendations.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Career</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 19 June 2025</span>
+          <span><i class="fa-regular fa-clock text-yellow-400 mr-1"></i>9 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-progress text-xs px-2.5 py-1 rounded-full">In Progress</span>
+          <button onclick="openViewModal(8)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+
+      <!-- Task 9 -->
+      <div class="task-card">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <h3 class="font-poppins font-semibold text-white text-sm leading-snug flex-1">Watch UI Design Tutorial</h3>
+          <span class="badge-low text-xs px-2.5 py-1 rounded-full">Low</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed mb-4">Learn modern UI/UX design principles from YouTube tutorials.</p>
+        <div class="flex items-center gap-2 mb-4 text-xs text-slate-500 flex-wrap">
+          <span><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>Learning</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i>Due: 28 June 2025</span>
+          <span><i class="fa-regular fa-clock text-slate-500 mr-1"></i>18 days left</span>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="badge-pending text-xs px-2.5 py-1 rounded-full">Pending</span>
+          <button onclick="openViewModal(9)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;">
+            <i class="fa-solid fa-eye mr-1"></i>View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto px-6 py-5" style="border-top:1px solid #2e3057;">
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-500"></i><span class="font-poppins font-semibold text-slate-400">TaskMate</span><span>© <span id="footerYear"></span> All rights reserved.</span></div>
+      <div class="flex flex-wrap gap-4"><span><i class="fa-solid fa-code-branch text-indigo-500 mr-1"></i>Version 1.0.0</span><span><i class="fa-regular fa-clock text-indigo-500 mr-1"></i>Last updated: <span id="footerDate"></span></span><span><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i>IMS566 · UiTM</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- Modals (same as dashboard) -->
+<div id="addModalOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.65);" onclick="closeAddModal(event)">
+  <div class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up" style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
+    <button onclick="closeAddModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <h3 class="font-poppins font-bold text-white text-lg mb-5"><i class="fa-solid fa-plus text-indigo-400 mr-2"></i>Add New Task</h3>
+    <div class="space-y-4">
+      <div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Title *</label><input type="text" placeholder="e.g. Complete assignment" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500" style="background:#12131f;border:1px solid #2e3057;"/></div>
+      <div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Description</label><textarea rows="3" placeholder="Task details…" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500 resize-none" style="background:#12131f;border:1px solid #2e3057;"></textarea></div>
+      <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Priority</label><select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"><option>High</option><option selected>Medium</option><option>Low</option></select></div><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Status</label><select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"><option>Pending</option><option>In Progress</option><option>Completed</option></select></div></div>
+      <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Due Date</label><input type="date" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"/></div><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Category</label><input type="text" placeholder="e.g. University" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"/></div></div>
+    </div>
+    <div class="flex gap-3 justify-end mt-6"><button onclick="closeAddModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white" style="background:#12131f;border:1px solid #2e3057;">Cancel</button><button onclick="saveTask()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#6366f1,#818cf8);"><i class="fa-solid fa-floppy-disk mr-2"></i>Save Task</button></div>
+  </div>
+</div>
+<div id="modalOverlay" onclick="closeModal(event)">
+  <div id="modalBox" class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up" style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+<script>
+  const username = sessionStorage.getItem('username') || 'Haikal';
+  document.getElementById('sidebarUsername').textContent = username === 'admin' ? 'Admin User' : username;
+  document.getElementById('avatarInitials').textContent = username.charAt(0).toUpperCase();
+  const today = new Date();
+  document.getElementById('footerYear').textContent = today.getFullYear();
+  document.getElementById('footerDate').textContent = today.toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+
+</body>
+</html>

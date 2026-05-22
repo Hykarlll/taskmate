@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="TaskMate – Personal Task Manager | IMS566 Individual Project"/>
+  <meta name="author" content="IMS566 Student"/>
+  <title>TaskMate – Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* Make sure main content is pushed right by the fixed sidebar */
+    #mainContent {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 768px) {
+      #mainContent {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar - fixed width, no hover expansion -->
+<aside id="sidebar">
+  <a href="dashboard.html" class="block px-5 py-5" style="border-bottom:1px solid #2e3057;">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-list-check text-white text-sm"></i>
+    </div>
+    <div>
+      <h2 class="font-poppins font-bold text-white text-base leading-none">TaskMate</h2>
+      <p class="text-slate-500 text-xs mt-0.5">Productivity App</p>
+    </div>
+  </div>
+</a>
+
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <p class="px-3 text-xs font-semibold uppercase tracking-widest text-slate-600 mb-2">Main Menu</p>
+
+    <a href="dashboard.html" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300">
+      <i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard
+    </a>
+    <a href="mytasks.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-list-check w-5 text-center"></i> My Tasks
+      <span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-500 text-white">9</span>
+    </a>
+    <a href="completed.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-circle-check w-5 text-center"></i> Completed Tasks
+    </a>
+    <a href="calendar.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-calendar-days w-5 text-center"></i> Calendar
+    </a>
+    <a href="profile.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-user w-5 text-center"></i> Profile
+    </a>
+  </nav>
+
+  <div class="px-3 py-4" style="border-top:1px solid #2e3057;">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:#12131f;">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);" id="avatarInitials">HF</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold text-white truncate" id="sidebarUsername">Haikal Farihin</p>
+        <p class="text-xs text-slate-500">Administrator</p>
+      </div>
+      <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors">
+        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content - pushed to the right -->
+<div id="mainContent">
+  <header class="sticky top-0 z-30 flex items-center gap-4 px-6 h-16" style="background:rgba(26,27,46,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2e3057;">
+    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden transition-colors mr-2">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+    <h2 class="font-poppins font-semibold text-white text-lg flex-1">Dashboard</h2>
+    <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Add Task</span>
+    </button>
+    <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors ml-2">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </a>
+  </header>
+
+  <!-- Dashboard content -->
+  <div class="p-6">
+    <!-- Welcome Banner -->
+    <div class="rounded-2xl p-6 mb-6 flex items-center gap-4 animate-fade-up" style="background:linear-gradient(135deg,#3730a3,#6366f1);border:1px solid #4f46e5;">
+      <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style="background:rgba(255,255,255,0.15);">👋</div>
+      <div>
+        <h2 class="font-poppins font-bold text-white text-xl">Welcome back, <span id="welcomeName">Haikal</span>!</h2>
+        <p class="text-indigo-200 text-sm mt-1">Here's your productivity overview for today.</p>
+      </div>
+      <div class="ml-auto text-right hidden sm:block">
+        <p class="text-indigo-200 text-xs">Today</p>
+        <p class="text-white font-semibold text-sm" id="todayDate"></p>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="stat-card"><div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Total Tasks</span><div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(99,102,241,0.15);"><i class="fa-solid fa-layer-group text-indigo-400 text-sm"></i></div></div><p class="font-poppins text-3xl font-bold text-white">9</p><p class="text-slate-500 text-xs mt-1">All your tasks</p></div>
+      <div class="stat-card"><div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Pending</span><div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(251,191,36,0.15);"><i class="fa-solid fa-clock text-yellow-400 text-sm"></i></div></div><p class="font-poppins text-3xl font-bold text-yellow-400">6</p><p class="text-slate-500 text-xs mt-1">Need attention</p></div>
+      <div class="stat-card"><div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold uppercase tracking-widest text-slate-400">In Progress</span><div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(99,102,241,0.15);"><i class="fa-solid fa-spinner text-indigo-400 text-sm"></i></div></div><p class="font-poppins text-3xl font-bold text-indigo-400">3</p><p class="text-slate-500 text-xs mt-1">Being worked on</p></div>
+      <div class="stat-card"><div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Completed</span><div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(52,211,153,0.15);"><i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i></div></div><p class="font-poppins text-3xl font-bold text-emerald-400">3</p><p class="text-slate-500 text-xs mt-1">Well done!</p></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="rounded-2xl p-5" style="background:#252640;border:1px solid #2e3057;"><h3 class="font-poppins font-semibold text-white text-sm mb-4"><i class="fa-solid fa-chart-pie text-indigo-400 mr-2"></i>Task Status Distribution</h3><canvas id="pieChart" style="max-height:220px;"></canvas></div>
+      <div class="rounded-2xl p-5" style="background:#252640;border:1px solid #2e3057;"><h3 class="font-poppins font-semibold text-white text-sm mb-4"><i class="fa-solid fa-chart-bar text-indigo-400 mr-2"></i>Tasks by Priority</h3><canvas id="barChart" style="max-height:220px;"></canvas></div>
+    </div>
+
+    <!-- Recent Tasks -->
+    <div class="rounded-2xl p-5" style="background:#252640;border:1px solid #2e3057;">
+      <div class="flex items-center justify-between mb-4"><h3 class="font-poppins font-semibold text-white text-sm"><i class="fa-solid fa-clock-rotate-left text-indigo-400 mr-2"></i>Recent Tasks</h3><a href="mytasks.html" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">View All <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></a></div>
+      <div id="recentTasksList" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto px-6 py-5" style="border-top:1px solid #2e3057;">
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-500"></i><span class="font-poppins font-semibold text-slate-400">TaskMate</span><span>© <span id="footerYear"></span> All rights reserved.</span></div>
+      <div class="flex flex-wrap gap-4"><span><i class="fa-solid fa-code-branch text-indigo-500 mr-1"></i>Version 1.0.0</span><span><i class="fa-regular fa-clock text-indigo-500 mr-1"></i>Last updated: <span id="footerDate"></span></span><span><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i>IMS566 · UiTM</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal for Add Task -->
+<div id="addModalOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.65);" onclick="closeAddModal(event)">
+  <div class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up" style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
+    <button onclick="closeAddModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <h3 class="font-poppins font-bold text-white text-lg mb-5"><i class="fa-solid fa-plus text-indigo-400 mr-2"></i>Add New Task</h3>
+    <div class="space-y-4">
+      <div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Title *</label><input type="text" placeholder="e.g. Complete assignment" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500" style="background:#12131f;border:1px solid #2e3057;"/></div>
+      <div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Description</label><textarea rows="3" placeholder="Task details…" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500 resize-none" style="background:#12131f;border:1px solid #2e3057;"></textarea></div>
+      <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Priority</label><select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"><option>High</option><option selected>Medium</option><option>Low</option></select></div><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Status</label><select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"><option>Pending</option><option>In Progress</option><option>Completed</option></select></div></div>
+      <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Due Date</label><input type="date" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"/></div><div><label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Category</label><input type="text" placeholder="e.g. University" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none" style="background:#12131f;border:1px solid #2e3057;"/></div></div>
+    </div>
+    <div class="flex gap-3 justify-end mt-6"><button onclick="closeAddModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white" style="background:#12131f;border:1px solid #2e3057;">Cancel</button><button onclick="saveTask()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#6366f1,#818cf8);"><i class="fa-solid fa-floppy-disk mr-2"></i>Save Task</button></div>
+  </div>
+</div>
+
+<!-- View Details Modal -->
+<div id="modalOverlay" onclick="closeModal(event)">
+  <div id="modalBox" class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up" style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+<script>
+  const username = sessionStorage.getItem('username') || 'Haikal';
+  document.getElementById('sidebarUsername').textContent = username === 'admin' ? 'Admin User' : username;
+  document.getElementById('avatarInitials').textContent = username.charAt(0).toUpperCase();
+
+  const today = new Date();
+  document.getElementById('todayDate').textContent = today.toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById('footerYear').textContent = today.getFullYear();
+  document.getElementById('footerDate').textContent = today.toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const recentTasks = [
+    { title: 'Complete IMS566 Project', category: 'University', due: '15 June 2025', status: 'progress', badge: 'badge-progress', statusText: 'In Progress' },
+    { title: 'Buy Groceries', category: 'Personal', due: '10 June 2025', status: 'pending', badge: 'badge-pending', statusText: 'Pending' },
+    { title: 'Submit Assignment', category: 'University', due: '20 June 2025', status: 'pending', badge: 'badge-pending', statusText: 'Pending' },
+    { title: 'Team Meeting', category: 'University', due: '5 June 2025', status: 'completed', badge: 'badge-completed', statusText: 'Completed' }
+  ];
+  const statusColor = { progress: 'bg-indigo-400', pending: 'bg-yellow-400', completed: 'bg-emerald-400' };
+  document.getElementById('recentTasksList').innerHTML = recentTasks.map(t => `
+    <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+      <div class="w-2 h-2 rounded-full flex-shrink-0 ${statusColor[t.status]}"></div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium text-white truncate">${t.title}</p><p class="text-xs text-slate-500">${t.category} · Due ${t.due}</p></div>
+      <div class="flex items-center gap-2 flex-shrink-0"><span class="${t.badge} text-xs px-2.5 py-1 rounded-full">${t.statusText}</span><button onclick="openViewModal(1)" class="text-xs text-indigo-400 hover:text-indigo-300">View →</button></div>
+    </div>
+  `).join('');
+
+  const pieCtx = document.getElementById('pieChart').getContext('2d');
+  new Chart(pieCtx, {
+    type: 'doughnut',
+    data: { labels: ['Pending', 'In Progress', 'Completed'], datasets: [{ data: [6, 3, 3], backgroundColor: ['#fbbf24', '#6366f1', '#34d399'], borderWidth: 0 }] },
+    options: { cutout: '62%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }, responsive: true }
+  });
+
+  const barCtx = document.getElementById('barChart').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: { labels: ['High', 'Medium', 'Low'], datasets: [{ label: 'Tasks', data: [3, 4, 2], backgroundColor: '#6366f1', borderRadius: 6 }] },
+    options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { color: '#94a3b8' } }, x: { ticks: { color: '#94a3b8' } } } }
+  });
+</script>
+
+</body>
+</html>

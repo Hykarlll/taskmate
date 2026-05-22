@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="TaskMate – Completed Tasks"/>
+  <meta name="author" content="IMS566 Student"/>
+  <title>TaskMate – Completed Tasks</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    #mainContent { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
+    @media (max-width: 768px) { #mainContent { margin-left: 0; } }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar (same as dashboard) -->
+<aside id="sidebar">
+  <a href="dashboard.html" class="block px-5 py-5" style="border-bottom:1px solid #2e3057;">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-list-check text-white text-sm"></i>
+    </div>
+    <div>
+      <h2 class="font-poppins font-bold text-white text-base leading-none">TaskMate</h2>
+      <p class="text-slate-500 text-xs mt-0.5">Productivity App</p>
+    </div>
+  </div>
+</a>
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <p class="px-3 text-xs font-semibold uppercase tracking-widest text-slate-600 mb-2">Main Menu</p>
+    <a href="dashboard.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400"><i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard</a>
+    <a href="mytasks.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400"><i class="fa-solid fa-list-check w-5 text-center"></i> My Tasks</a>
+    <a href="completed.html" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300"><i class="fa-solid fa-circle-check w-5 text-center"></i> Completed Tasks</a>
+    <a href="calendar.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400"><i class="fa-solid fa-calendar-days w-5 text-center"></i> Calendar</a>
+    <a href="profile.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400"><i class="fa-solid fa-user w-5 text-center"></i> Profile</a>
+  </nav>
+  <div class="px-3 py-4" style="border-top:1px solid #2e3057;">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:#12131f;">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);" id="avatarInitials">HF</div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-white truncate" id="sidebarUsername">Haikal Farihin</p><p class="text-xs text-slate-500">Administrator</p></div>
+      <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors"><i class="fa-solid fa-arrow-right-from-bracket text-sm"></i></a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div id="mainContent">
+  <header class="sticky top-0 z-30 flex items-center gap-4 px-6 h-16" style="background:rgba(26,27,46,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2e3057;">
+    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden transition-colors mr-2">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+    <h2 class="font-poppins font-semibold text-white text-lg flex-1">Completed Tasks</h2>
+    <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors ml-2"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+  </header>
+
+  <div class="p-6">
+    <div class="flex items-center justify-between gap-3 mb-6">
+      <div><h2 class="font-poppins font-bold text-white text-xl">Completed Tasks</h2><p class="text-slate-400 text-sm mt-1">Tasks you have finished (3 completed tasks)</p></div>
+      <div class="flex items-center gap-2 px-4 py-2 rounded-xl" style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.2);"><i class="fa-solid fa-trophy text-emerald-400 text-sm"></i><span class="text-emerald-400 text-sm font-semibold">3 completed</span></div>
+    </div>
+
+    <div class="rounded-2xl overflow-hidden" style="background:#252640;border:1px solid #2e3057;">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead><tr style="background:#1a1b2e;border-bottom:1px solid #2e3057;"><th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Task</th><th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Category</th><th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Priority</th><th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Completed Date</th><th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Action</th></tr></thead>
+          <tbody>
+            <tr class="border-b hover:bg-white/5 transition-colors" style="border-color:#2e3057;"><td class="px-5 py-4"><p class="font-medium text-white text-sm">Team Meeting</p><p class="text-xs text-slate-500 mt-0.5">Weekly sync with project group members</p></td><td class="px-5 py-4 text-sm text-slate-400">University</td><td class="px-5 py-4"><span class="badge-low text-xs px-2.5 py-1 rounded-full">Low</span></td><td class="px-5 py-4 text-sm text-slate-400 whitespace-nowrap">5 June 2025</td><td class="px-5 py-4"><button onclick="openViewModal(10)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="fa-solid fa-eye mr-1"></i>View</button></td></tr>
+            <tr class="border-b hover:bg-white/5 transition-colors" style="border-color:#2e3057;"><td class="px-5 py-4"><p class="font-medium text-white text-sm">Update Resume</p><p class="text-xs text-slate-500 mt-0.5">Add internship experience and new skills</p></td><td class="px-5 py-4 text-sm text-slate-400">Career</td><td class="px-5 py-4"><span class="badge-medium text-xs px-2.5 py-1 rounded-full">Medium</span></td><td class="px-5 py-4 text-sm text-slate-400 whitespace-nowrap">8 June 2025</td><td class="px-5 py-4"><button onclick="openViewModal(11)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="fa-solid fa-eye mr-1"></i>View</button></td></tr>
+            <tr class="border-b hover:bg-white/5 transition-colors" style="border-color:#2e3057;"><td class="px-5 py-4"><p class="font-medium text-white text-sm">Pay Utility Bills</p><p class="text-xs text-slate-500 mt-0.5">Electricity and water bills paid online</p></td><td class="px-5 py-4 text-sm text-slate-400">Finance</td><td class="px-5 py-4"><span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span></td><td class="px-5 py-4 text-sm text-slate-400 whitespace-nowrap">7 June 2025</td><td class="px-5 py-4"><button onclick="openViewModal(12)" class="text-xs px-3 py-1.5 rounded-lg font-medium" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="fa-solid fa-eye mr-1"></i>View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-auto px-6 py-5" style="border-top:1px solid #2e3057;">
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-500"></i><span class="font-poppins font-semibold text-slate-400">TaskMate</span><span>© <span id="footerYear"></span> All rights reserved.</span></div>
+      <div class="flex flex-wrap gap-4"><span><i class="fa-solid fa-code-branch text-indigo-500 mr-1"></i>Version 1.0.0</span><span><i class="fa-regular fa-clock text-indigo-500 mr-1"></i>Last updated: <span id="footerDate"></span></span><span><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i>IMS566 · UiTM</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- Modals (same as before) -->
+<div id="addModalOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.65);" onclick="closeAddModal(event)"> ... </div>
+<div id="modalOverlay" onclick="closeModal(event)"> ... </div>
+
+<script src="js/script.js"></script>
+<script>
+  const username = sessionStorage.getItem('username') || 'Haikal';
+  document.getElementById('sidebarUsername').textContent = username === 'admin' ? 'Admin User' : username;
+  document.getElementById('avatarInitials').textContent = username.charAt(0).toUpperCase();
+  const today = new Date();
+  document.getElementById('footerYear').textContent = today.getFullYear();
+  document.getElementById('footerDate').textContent = today.toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+
+</body>
+</html>

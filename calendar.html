@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="TaskMate – Calendar View"/>
+  <meta name="author" content="IMS566 Student"/>
+  <title>TaskMate – Calendar</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    #mainContent {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 768px) {
+      #mainContent { margin-left: 0; }
+    }
+    .cal-cell { transition: all 0.2s ease; }
+    .cal-cell:hover { background: rgba(99,102,241,0.1); cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar – exactly the same as dashboard -->
+<aside id="sidebar">
+  <a href="dashboard.html" class="block px-5 py-5" style="border-bottom:1px solid #2e3057;">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);">
+      <i class="fa-solid fa-list-check text-white text-sm"></i>
+    </div>
+    <div>
+      <h2 class="font-poppins font-bold text-white text-base leading-none">TaskMate</h2>
+      <p class="text-slate-500 text-xs mt-0.5">Productivity App</p>
+    </div>
+  </div>
+</a>
+
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <p class="px-3 text-xs font-semibold uppercase tracking-widest text-slate-600 mb-2">Main Menu</p>
+    <a href="dashboard.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard
+    </a>
+    <a href="mytasks.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-list-check w-5 text-center"></i> My Tasks
+    </a>
+    <a href="completed.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-circle-check w-5 text-center"></i> Completed Tasks
+    </a>
+    <a href="calendar.html" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300">
+      <i class="fa-solid fa-calendar-days w-5 text-center"></i> Calendar
+    </a>
+    <a href="profile.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
+      <i class="fa-solid fa-user w-5 text-center"></i> Profile
+    </a>
+  </nav>
+
+  <div class="px-3 py-4" style="border-top:1px solid #2e3057;">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:#12131f;">
+      <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#6366f1,#818cf8);" id="avatarInitials">HF</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold text-white truncate" id="sidebarUsername">Haikal Farihin</p>
+        <p class="text-xs text-slate-500">Administrator</p>
+      </div>
+      <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors">
+        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div id="mainContent">
+  <header class="sticky top-0 z-30 flex items-center gap-4 px-6 h-16" style="background:rgba(26,27,46,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2e3057;">
+    <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden transition-colors mr-2">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+    <h2 class="font-poppins font-semibold text-white text-lg flex-1">Calendar</h2>
+    <a href="#" onclick="logout()" class="text-slate-500 hover:text-red-400 transition-colors ml-2"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+  </header>
+
+  <div class="p-6">
+    <div class="mb-6">
+      <h2 class="font-poppins font-bold text-white text-xl">Calendar View</h2>
+      <p class="text-slate-400 text-sm mt-1">Track tasks by their due dates</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Calendar Grid -->
+      <div class="lg:col-span-2 rounded-2xl p-5" style="background:#252640;border:1px solid #2e3057;">
+        <div class="flex items-center justify-between mb-4">
+          <button onclick="changeCalMonth(-1)" class="text-slate-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+          </button>
+          <h3 class="font-poppins font-semibold text-white text-sm" id="calMonthLabel">June 2025</h3>
+          <button onclick="changeCalMonth(1)" class="text-slate-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-7 gap-1 mb-2">
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Sun</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Mon</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Tue</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Wed</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Thu</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Fri</div>
+          <div class="text-center text-xs font-semibold uppercase text-slate-500 py-2">Sat</div>
+        </div>
+
+        <!-- Full June 2025 calendar -->
+        <div class="grid grid-cols-7 gap-1">
+          <!-- Week 1 -->
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">1</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">2</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">3</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">4</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(239,68,68,0.07);">
+            <span class="text-xs text-slate-400">5</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#6ee7b7;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">6</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(239,68,68,0.07);">
+            <span class="text-xs text-slate-400">7</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#f87171;"></div></div>
+          </div>
+
+          <!-- Week 2 -->
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(99,102,241,0.07);">
+            <span class="text-xs text-slate-400">8</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#fbbf24;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">9</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(99,102,241,0.07);">
+            <span class="text-xs text-slate-400">10</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#fbbf24;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">11</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(99,102,241,0.07);">
+            <span class="text-xs text-slate-400">12</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#6ee7b7;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">13</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">14</span></div>
+
+          <!-- Week 3 -->
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(239,68,68,0.07);">
+            <span class="text-xs text-slate-400">15</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#f87171;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">16</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">17</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(99,102,241,0.07);">
+            <span class="text-xs text-slate-400">18</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#6ee7b7;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">19</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell" style="background:rgba(239,68,68,0.07);">
+            <span class="text-xs text-slate-400">20</span>
+            <div class="flex gap-0.5"><div style="width:5px;height:5px;border-radius:50%;background:#f87171;"></div></div>
+          </div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">21</span></div>
+
+          <!-- Week 4 -->
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">22</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">23</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">24</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">25</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">26</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">27</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">28</span></div>
+
+          <!-- Week 5 -->
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">29</span></div>
+          <div class="rounded-lg p-1 min-h-[52px] flex flex-col items-center cal-cell"><span class="text-xs text-slate-400">30</span></div>
+        </div>
+      </div>
+
+      <!-- Upcoming Deadlines -->
+      <div class="rounded-2xl p-5" style="background:#252640;border:1px solid #2e3057;">
+        <h3 class="font-poppins font-semibold text-white text-sm mb-4">
+          <i class="fa-solid fa-calendar-week text-indigo-400 mr-2"></i>Upcoming Deadlines
+        </h3>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:#1a1b2e;">
+            <div class="text-center min-w-[40px]">
+              <div class="font-poppins font-bold text-lg leading-none text-red-400">15</div>
+              <div class="text-xs text-slate-500 uppercase">Jun</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-white truncate">Complete IMS566 Project</p>
+              <p class="text-xs text-slate-500">5 days left</p>
+            </div>
+            <span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:#1a1b2e;">
+            <div class="text-center min-w-[40px]">
+              <div class="font-poppins font-bold text-lg leading-none text-yellow-400">20</div>
+              <div class="text-xs text-slate-500 uppercase">Jun</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-white truncate">Submit Assignment</p>
+              <p class="text-xs text-slate-500">10 days left</p>
+            </div>
+            <span class="badge-high text-xs px-2.5 py-1 rounded-full">High</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:#1a1b2e;">
+            <div class="text-center min-w-[40px]">
+              <div class="font-poppins font-bold text-lg leading-none text-indigo-400">10</div>
+              <div class="text-xs text-slate-500 uppercase">Jun</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-white truncate">Buy Groceries</p>
+              <p class="text-xs text-slate-500">Due today!</p>
+            </div>
+            <span class="badge-medium text-xs px-2.5 py-1 rounded-full">Medium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto px-6 py-5" style="border-top:1px solid #2e3057;">
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-500"></i><span class="font-poppins font-semibold text-slate-400">TaskMate</span><span>© <span id="footerYear"></span> All rights reserved.</span></div>
+      <div class="flex flex-wrap gap-4"><span><i class="fa-solid fa-code-branch text-indigo-500 mr-1"></i>Version 1.0.0</span><span><i class="fa-regular fa-clock text-indigo-500 mr-1"></i>Last updated: <span id="footerDate"></span></span><span><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i>IMS566 · UiTM</span></div>
+    </div>
+  </footer>
+</div>
+
+<script src="js/script.js"></script>
+<script>
+  const username = sessionStorage.getItem('username') || 'Haikal';
+  document.getElementById('sidebarUsername').textContent = username === 'admin' ? 'Admin User' : username;
+  document.getElementById('avatarInitials').textContent = username.charAt(0).toUpperCase();
+  const today = new Date();
+  document.getElementById('footerYear').textContent = today.getFullYear();
+  document.getElementById('footerDate').textContent = today.toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+
+</body>
+</html>

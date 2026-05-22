@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="TaskMate – Personal Task Manager | IMS566 Individual Project (UI Prototype)"/>
+  <meta name="description" content="TaskMate – Personal Task Manager | IMS566 Individual Project"/>
   <meta name="author" content="IMS566 Student"/>
-  <title>TaskMate – Task Manager UI Prototype</title>
+  <title>TaskMate – Task Manager</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,357 +16,222 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Vanta.js (Background Waves Effect) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.waves.min.js"></script>
-
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Tailwind Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            poppins: ['Poppins', 'sans-serif'],
-            inter: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            primary: { DEFAULT: '#6366f1', dark: '#4f46e5', light: '#818cf8' },
-          },
-          animation: {
-            'fade-up': 'fadeUp 0.4s ease both',
-          },
-          keyframes: {
-            fadeUp: {
-              from: { opacity: 0, transform: 'translateY(18px)' },
-              to: { opacity: 1, transform: 'translateY(0)' },
-            },
-          },
-        },
-      },
+  <style>
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      z-index: 10;
     }
-  </script>
+    .card-login {
+      background: rgba(30, 31, 46, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid #2e3057;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 100%;
+    }
+    #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .form-control {
+      background: #12131f;
+      border: 1px solid #2e3057;
+      color: white;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+    }
+    .form-control:focus {
+      background: #12131f;
+      border-color: #6366f1;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
+      color: white;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+    }
+  </style>
 </head>
 <body>
 
-<!-- Vanta Background Container -->
 <div id="vanta-bg"></div>
 
-<!-- ==================== LOGIN SCREEN ==================== -->
-<div id="loginScreen">
-  <div class="animate-fade-up w-full max-w-md mx-4">
-
+<div class="login-wrapper">
+  <div class="card-login p-8">
+    
     <!-- Brand -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-           style="background: linear-gradient(135deg,#6366f1,#818cf8);">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-gradient-to-r from-indigo-500 to-indigo-400">
         <i class="fa-solid fa-list-check text-white text-2xl"></i>
       </div>
       <h1 class="font-poppins text-3xl font-bold text-white">TaskMate</h1>
-      <p class="text-slate-400 text-sm mt-1">UI Prototype | IMS566 Individual Project</p>
+      <p class="text-slate-400 text-sm mt-1">UI Prototype | IMS566 - Individual Assignment</p>
     </div>
 
-    <!-- Login Card -->
-    <div class="rounded-2xl p-8" style="background:rgba(30,31,46,0.85);backdrop-filter:blur(16px);border:1px solid #2e3057;">
-
-      <!-- Tabs -->
-      <div class="flex gap-1 p-1 rounded-xl mb-6" style="background:#12131f;">
-        <button id="tabLogin" onclick="switchAuthTab('login')"
-                class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all text-white"
-                style="background:#6366f1;">
-          <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
-        </button>
-        <button id="tabRegister" onclick="switchAuthTab('register')"
-                class="flex-1 py-2 rounded-lg text-sm font-semibold transition-all text-slate-400">
-          <i class="fa-solid fa-user-plus mr-1"></i> Register
-        </button>
-      </div>
-
-      <!-- Login Form -->
-      <div id="loginForm">
-        <div id="loginError" class="hidden mb-4 px-4 py-3 rounded-xl text-sm font-medium text-red-300"
-             style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);">
-          <i class="fa-solid fa-circle-exclamation mr-2"></i>
-          Invalid username or password. Please try again.
-        </div>
-
-        <div class="mb-4">
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Username</label>
-          <div class="relative">
-            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input id="loginUser" type="text" placeholder="e.g. admin"
-                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-                   style="background:#12131f;border:1px solid #2e3057;"/>
-          </div>
-        </div>
-
-        <div class="mb-6">
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Password</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input id="loginPass" type="password" placeholder="••••••••"
-                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-                   style="background:#12131f;border:1px solid #2e3057;"/>
-          </div>
-        </div>
-
-        <button onclick="doLogin()"
-                class="w-full py-3 rounded-xl font-poppins font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-                style="background:linear-gradient(135deg,#6366f1,#818cf8);">
-          <i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In
-        </button>
-
-        <div class="mt-5 p-3 rounded-xl text-center text-xs text-slate-400"
-             style="background:#12131f;border:1px solid #2e3057;">
-          <i class="fa-solid fa-circle-info mr-1 text-indigo-400"></i>
-          Demo: <span class="text-indigo-400 font-semibold">admin / task123</span>
-          &nbsp;or&nbsp;
-          <span class="text-indigo-400 font-semibold">user / 12345</span>
-        </div>
-      </div>
-
-      <!-- Register Form (UI Only) -->
-      <div id="registerForm" class="hidden">
-        <div class="mb-4">
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Full Name</label>
-          <div class="relative">
-            <i class="fa-solid fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input type="text" placeholder="Your full name"
-                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-                   style="background:#12131f;border:1px solid #2e3057;"/>
-          </div>
-        </div>
-        <div class="mb-4">
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Email</label>
-          <div class="relative">
-            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input type="email" placeholder="you@example.com"
-                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-                   style="background:#12131f;border:1px solid #2e3057;"/>
-          </div>
-        </div>
-        <div class="mb-4">
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Password</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-            <input type="password" placeholder="Min. 6 characters"
-                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-                   style="background:#12131f;border:1px solid #2e3057;"/>
-          </div>
-        </div>
-        <button onclick="doRegister()"
-                class="w-full py-3 rounded-xl font-poppins font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-                style="background:linear-gradient(135deg,#6366f1,#818cf8);">
-          <i class="fa-solid fa-user-plus mr-2"></i> Create Account
-        </button>
-        <p class="text-center text-xs text-slate-500 mt-4">
-          <i class="fa-solid fa-triangle-exclamation text-yellow-500 mr-1"></i>
-          UI Prototype – No actual account will be created.
-        </p>
-      </div>
+    <!-- Tabs -->
+    <div class="flex gap-1 p-1 rounded-xl mb-6" style="background:#12131f;">
+      <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg text-sm font-semibold text-white" style="background:#6366f1;">
+        <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
+      </button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-sm font-semibold text-slate-400">
+        <i class="fa-solid fa-user-plus mr-1"></i> Register
+      </button>
     </div>
 
-    <p class="text-center text-xs text-slate-600 mt-6">
-      IMS566 · Advanced Web Design Development and Content Management · UI Prototype
-    </p>
-  </div>
-</div>
-
-<!-- ==================== APP SHELL (After Login) ==================== -->
-<div id="appShell" style="display:none; background:#12131f; min-height:100vh; flex-direction:column;">
-
-  <!-- Sidebar Overlay (Mobile) -->
-  <div id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-  <!-- Sidebar -->
-  <aside id="sidebar">
-    <div class="px-5 py-5 flex items-center gap-3" style="border-bottom:1px solid #2e3057;">
-      <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-           style="background:linear-gradient(135deg,#6366f1,#818cf8);">
-        <i class="fa-solid fa-list-check text-white text-sm"></i>
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div id="loginError" class="hidden mb-4 px-4 py-3 rounded-xl text-sm font-medium text-red-300" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);">
+        <i class="fa-solid fa-circle-exclamation mr-2"></i> Invalid username or password.
       </div>
-      <div>
-        <h2 class="font-poppins font-bold text-white text-base leading-none">TaskMate</h2>
-        <p class="text-slate-500 text-xs mt-0.5">UI Prototype</p>
-      </div>
-    </div>
 
-    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-      <p class="px-3 text-xs font-semibold uppercase tracking-widest text-slate-600 mb-2">Main Menu</p>
-
-      <a href="#" onclick="navigate('dashboard'); return false;" id="nav-dashboard"
-         class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300">
-        <i class="fa-solid fa-gauge-high w-5 text-center"></i> Dashboard
-      </a>
-      <a href="#" onclick="navigate('mytasks'); return false;" id="nav-mytasks"
-         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
-        <i class="fa-solid fa-list-check w-5 text-center"></i> My Tasks
-      </a>
-      <a href="#" onclick="navigate('completed'); return false;" id="nav-completed"
-         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
-        <i class="fa-solid fa-circle-check w-5 text-center"></i> Completed Tasks
-      </a>
-      <a href="#" onclick="navigate('calendar'); return false;" id="nav-calendar"
-         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400">
-        <i class="fa-solid fa-calendar-days w-5 text-center"></i> Calendar
-      </a>
-    </nav>
-
-    <div class="px-3 py-4" style="border-top:1px solid #2e3057;">
-      <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:#12131f;">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-             style="background:linear-gradient(135deg,#6366f1,#818cf8);" id="avatarInitials">DU</div>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold text-white truncate" id="sidebarUsername">Demo User</p>
-          <p class="text-xs text-slate-500">UI Prototype</p>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Username</label>
+        <div class="relative">
+          <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+          <input id="loginUser" type="text" placeholder="e.g. Haikal" class="form-control w-full pl-10">
         </div>
-        <button onclick="doLogout()" title="Logout" class="text-slate-500 hover:text-red-400 transition-colors">
-          <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-        </button>
       </div>
-    </div>
-  </aside>
 
-  <!-- Main Content -->
-  <div id="mainContent">
+      <div class="mb-6">
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Password</label>
+        <div class="relative">
+          <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+          <input id="loginPass" type="password" placeholder="••••••••" class="form-control w-full pl-10">
+            <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-indigo-400">
+            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
 
-    <!-- Top Bar -->
-    <header class="sticky top-0 z-30 flex items-center gap-4 px-6 h-16"
-            style="background:rgba(26,27,46,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2e3057;">
-      <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white md:hidden transition-colors">
-        <i class="fa-solid fa-bars text-lg"></i>
+      <button onclick="doLogin()" class="btn-primary w-full py-3 mb-4">
+        <i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In
       </button>
 
-      <h2 class="font-poppins font-semibold text-white text-lg flex-1" id="pageTitle">Dashboard</h2>
-
-      <button onclick="openAddModal()"
-              class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-              style="background:linear-gradient(135deg,#6366f1,#818cf8);">
-        <i class="fa-solid fa-plus"></i>
-        <span class="hidden sm:inline">Add Task</span>
-      </button>
-
-      <button onclick="doLogout()" class="text-slate-500 hover:text-red-400 transition-colors ml-2">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-      </button>
-    </header>
-
-    <!-- Page Container - Content loads here -->
-    <div id="pageContainer">
-      <!-- Dashboard will load here by default -->
-    </div>
-
-    <!-- Footer -->
-    <footer class="mt-auto px-6 py-5" style="border-top:1px solid #2e3057;">
-      <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-list-check text-indigo-500"></i>
-          <span class="font-poppins font-semibold text-slate-400">TaskMate</span>
-          <span>© <span id="footerYear"></span> UI Prototype</span>
-        </div>
-        <div class="flex flex-wrap gap-4">
-          <span><i class="fa-solid fa-code-branch text-indigo-500 mr-1"></i>Version 1.0</span>
-          <span><i class="fa-regular fa-clock text-indigo-500 mr-1"></i>Last updated: <span id="footerDate"></span></span>
-          <span><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i>IMS566 · UiTM</span>
-        </div>
-      </div>
-    </footer>
-
-  </div>
-</div>
-
-<!-- ==================== MODALS ==================== -->
-
-<!-- View Details Modal -->
-<div id="modalOverlay" onclick="closeModal(event)">
-  <div id="modalBox" class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up"
-       style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
-    <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white">
-      <i class="fa-solid fa-xmark text-lg"></i>
-    </button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<!-- Add/Edit Task Modal -->
-<div id="addModalOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center"
-     style="background:rgba(0,0,0,0.65);" onclick="closeAddModal(event)">
-  <div class="relative w-full max-w-lg mx-4 rounded-2xl p-6 animate-fade-up"
-       style="background:#1e1f2e;border:1px solid #2e3057;" onclick="event.stopPropagation()">
-    <button onclick="closeAddModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white">
-      <i class="fa-solid fa-xmark text-lg"></i>
-    </button>
-    <h3 class="font-poppins font-bold text-white text-lg mb-5" id="addModalTitle">
-      <i class="fa-solid fa-plus text-indigo-400 mr-2"></i>Add New Task
-    </h3>
-
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Title *</label>
-        <input type="text" placeholder="e.g. Complete assignment"
-               class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500"
-               style="background:#12131f;border:1px solid #2e3057;"/>
-      </div>
-      <div>
-        <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Description</label>
-        <textarea rows="3" placeholder="Task details…"
-                  class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-                  style="background:#12131f;border:1px solid #2e3057;"></textarea>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Priority</label>
-          <select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none"
-                  style="background:#12131f;border:1px solid #2e3057;">
-            <option>High</option>
-            <option selected>Medium</option>
-            <option>Low</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Status</label>
-          <select class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none"
-                  style="background:#12131f;border:1px solid #2e3057;">
-            <option>Pending</option>
-            <option>In Progress</option>
-            <option>Completed</option>
-          </select>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Due Date</label>
-          <input type="date" class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none"
-                 style="background:#12131f;border:1px solid #2e3057;"/>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Category</label>
-          <input type="text" placeholder="e.g. University"
-                 class="w-full px-4 py-3 rounded-xl text-sm text-white outline-none"
-                 style="background:#12131f;border:1px solid #2e3057;"/>
-        </div>
+      <div class="mt-4 p-3 rounded-xl text-center bg-[#12131f] border border-[#2e3057]">
+        <i class="fa-solid fa-circle-info mr-1 text-indigo-400"></i>
+        <span class="text-slate-400 text-xs">Demo: </span>
+        <span class="text-indigo-400 font-semibold text-xs">Haikal / password123</span>
+        <span class="text-slate-500 text-xs"> or </span>
+        <span class="text-indigo-400 font-semibold text-xs">User / 12345</span>
       </div>
     </div>
-
-    <div class="flex gap-3 justify-end mt-6">
-      <button onclick="closeAddModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white"
-              style="background:#12131f;border:1px solid #2e3057;">Cancel</button>
-      <button onclick="saveTask()"
-              class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-              style="background:linear-gradient(135deg,#6366f1,#818cf8);">
-        <i class="fa-solid fa-floppy-disk mr-2"></i>Save Task
+ 
+    <!-- Register Form -->
+    <div id="registerForm" class="hidden">
+      <div class="mb-4">
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Full Name</label>
+        <input type="text" placeholder="Your full name" class="form-control w-full">
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Email</label>
+        <input type="email" placeholder="you@example.com" class="form-control w-full">
+      </div>
+      <div class="mb-4">
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Password</label>
+        <input type="password" placeholder="Min. 6 characters" class="form-control w-full">
+      </div>
+      <button onclick="doRegister()" class="btn-primary w-full py-3">
+        <i class="fa-solid fa-user-plus mr-2"></i> Create Account
       </button>
+      <p class="text-center text-xs text-slate-500 mt-4">UI Prototype – No actual account created</p>
+    </div>
+
+    <div class="text-center mt-6">
+      <p class="text-slate-500 text-xs">IMS566 · Advanced Web Design & Development · UI Prototype</p>
     </div>
   </div>
 </div>
 
-<!-- Custom JavaScript -->
-<script src="js/script.js"></script>
+<!-- Vanta Background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+<script>
+  VANTA.WAVES({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    color: 0x0d0e1a,
+    shininess: 40,
+    waveHeight: 18,
+    waveSpeed: 0.6,
+    zoom: 0.9
+  });
+
+
+  // Auth Tab Switching and Login Logic (UI Only)
+  function switchAuthTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
+    document.getElementById('registerForm').classList.toggle('hidden', isLogin);
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    if (isLogin) {
+      tabLogin.style.background = '#6366f1';
+      tabLogin.classList.remove('text-slate-400');
+      tabLogin.classList.add('text-white');
+      tabRegister.style.background = '';
+      tabRegister.classList.remove('text-white');
+      tabRegister.classList.add('text-slate-400');
+    } else {
+      tabRegister.style.background = '#6366f1';
+      tabRegister.classList.remove('text-slate-400');
+      tabRegister.classList.add('text-white');
+      tabLogin.style.background = '';
+      tabLogin.classList.remove('text-white');
+      tabLogin.classList.add('text-slate-400');
+    }
+  }
+
+  function doRegister() {
+  // UI ONLY - does absolutely nothing
+  return false;
+}
+
+  function doLogin() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value.trim();
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.classList.add('hidden');
+    
+    const validUsers = [
+      { username: 'Haikal', password: 'password123' },
+      { username: 'User', password: '12345' }
+    ];
+    const validUser = validUsers.find(u => u.username === username && u.password === password);
+    
+    if (validUser) {
+      sessionStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('username', username);
+      window.location.href = 'dashboard.html';
+    } else {
+      errorDiv.classList.remove('hidden');
+    }
+  }
+
+  document.getElementById('loginPass').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+</script>
 
 </body>
 </html>
